@@ -5,7 +5,7 @@ import { Car, newCarDTO } from './cars.models';
 
 @Injectable()
 export class CarsService {
-  constructor(@InjectModel('Cars') private readonly carModel: Model<Car>) {}
+  constructor(@InjectModel('Car') private readonly carModel: Model<Car>) {}
   async create(createCarDto: newCarDTO) {
     const newCarDTO = new this.carModel({
       name: createCarDto.name,

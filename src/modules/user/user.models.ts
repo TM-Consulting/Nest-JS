@@ -1,6 +1,9 @@
 import * as mongoose from 'mongoose';
 
-export class newUserDTO {}
+export class newUserDTO {
+  name: string;
+  email: string;
+}
 export class updateUserDTO {}
 
 export const UserSchema = new mongoose.Schema({

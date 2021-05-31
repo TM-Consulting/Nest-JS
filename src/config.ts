@@ -1,6 +1,8 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 export default {
   database: {
-    mongoDB_Cluster:
-      'mongodb+srv://monaimt:JLjuK50M31HJQNSo@first.4ivod.mongodb.net/first-db?retryWrites=true&w=majority',
+    mongoDB_Cluster: `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSEWORD}@cluster0.3ow5w.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
   },
 };

@@ -8,11 +8,11 @@ export class UserService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
   async create(createUserDto: newUserDTO) {
     const newUser = new this.userModel({
-      name: 'Monaim',
-      email: 'monaim@3wa.fr',
+      name: createUserDto.name,
+      email: createUserDto.email,
     });
     const result = await newUser.save();
-    return result.id as string;
+    return result;
   }
 
   findAll() {

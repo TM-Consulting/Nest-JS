@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import config from './config';
 import { UserModule } from './modules/user/user.module';
+console.log(config.database.mongoDB_Cluster);
 @Module({
   imports: [
     UserModule,

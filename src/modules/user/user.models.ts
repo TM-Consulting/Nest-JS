@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 export class newUserDTO {
+  // DATA TRANSFERT OBJECT
   name: string;
   email: string;
 }

@@ -1,17 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, userDTO, updateUserDTO } from './user.models';
+import { User, userDTO, updateUserDTO, loginUserDTO } from './user.models';
 import * as bcrypt from 'bcrypt';
+import { CarsService } from '../cars/cars.service';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectModel('User') private readonly userModel: Model<User>,
+    private readonly carsService: CarsService,
+    private jwtService: JwtService,
+  ) {} // @Inject() private readonly carsService: CarsService,
 
   async create(createUserDto: userDTO) {
+    const salt = await bcrypt.genSalt();
     const newUser = new this.userModel({
       name: createUserDto.name,
       email: createUserDto.email,
-      password: await bcrypt.hash(createUserDto.password, 10),
+      salt: salt,
+      password: await bcrypt.hash(createUserDto.password, salt),
     });
     const existedUser = await this.findOneByEmail(createUserDto.email);
     if (existedUser) {
@@ -32,9 +40,43 @@ export class UserService {
       },
     };
   }
+  login = async (loginUserDTO: loginUserDTO) => {
+    const user = await this.findOneByEmail(loginUserDTO.email);
+    if (!user)
+      return {
+        operation: {
+          success: false,
+          message: 'email or password are not corrects',
+          data: { user: null },
+        },
+      };
+    else {
+      const hashedPassword = await bcrypt.hash(
+        loginUserDTO.password,
+        user.salt,
+      );
+      console.log(hashedPassword, user.password);
 
+      if (hashedPassword === user.password) {
+        const payload = { ...user };
+        const jwt = await this.jwtService.sign(payload);
+        return {
+          access_token: jwt,
+        };
+      } else
+        return {
+          operation: {
+            success: false,
+            message: 'Password is not correct',
+            data: { user: null },
+          },
+        };
+    }
+  };
   async findAll() {
-    return await this.userModel.find().exec();
+    // return await this.userModel.find().exec();
+
+    return this.carsService.findAll();
   }
 
   async findOne(id: string) {

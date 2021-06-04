@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { UserService } from '../user/user.service';
 import { Car, newCarsDTO, updateCarsDTO } from './cars.models';
 
 @Injectable()
 export class CarsService {
-  constructor(@InjectModel('Cars') private readonly carsModel: Model<Car>) {}
+  constructor(
+    @InjectModel('Cars') private readonly carsModel: Model<Car>,
+    private readonly userService: UserService,
+  ) {}
   async create(createCarsDto: newCarsDTO) {
     const newCar = new this.carsModel({
       modele: createCarsDto.modele,

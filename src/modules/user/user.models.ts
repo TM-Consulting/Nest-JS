@@ -23,12 +23,21 @@ export class updateUserDTO {
   @IsOptional()
   email?: string;
 }
+export class loginUserDTO {
+  @Length(6, 40)
+  @IsEmail()
+  email: string;
+
+  @Length(6, 15)
+  password: string;
+}
 
 export const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
   email_verified: { type: Boolean, required: false, default: false },
+  salt: { type: String, required: true },
 });
 
 export interface User extends mongoose.Document {
@@ -37,4 +46,5 @@ export interface User extends mongoose.Document {
   email: string;
   password: string;
   email_verified: boolean;
+  salt: string;
 }

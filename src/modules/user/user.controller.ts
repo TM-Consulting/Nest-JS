@@ -7,7 +7,7 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { updateUserDTO, userDTO } from './user.models';
+import { loginDTO, updateUserDTO, userDTO } from './user.models';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -17,6 +17,11 @@ export class UserController {
   @Post()
   create(@Body() createUserDto: userDTO) {
     return this.userService.create(createUserDto);
+  }
+
+  @Post('login')
+  login(@Body() loginDto: loginDTO) {
+    return this.userService.login(loginDto);
   }
 
   @Get()

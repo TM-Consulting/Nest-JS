@@ -13,6 +13,15 @@ export class userDTO {
   password: string;
 }
 
+export class loginDTO {
+  @Length(6, 40)
+  @IsEmail()
+  email: string;
+
+  @Length(6, 15)
+  password: string;
+}
+
 export class updateUserDTO {
   @Length(6, 30)
   @IsOptional()

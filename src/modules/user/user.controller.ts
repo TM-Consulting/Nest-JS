@@ -39,3 +39,8 @@ export class UserController {
     return this.userService.remove(id);
   }
 }
+
+@Controller('login')
+export class loginController {
+  constructor(private readonly userService: UserService) {}
+}

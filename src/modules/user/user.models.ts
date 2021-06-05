@@ -2,7 +2,7 @@ import { Length, IsEmail, IsOptional } from 'class-validator';
 import * as mongoose from 'mongoose';
 
 export class userDTO {
-  @Length(6, 30)
+  @Length(3, 30)
   name: string;
 
   @Length(6, 40)
@@ -14,7 +14,7 @@ export class userDTO {
 }
 
 export class updateUserDTO {
-  @Length(6, 30)
+  @Length(3, 30)
   @IsOptional()
   name?: string;
 

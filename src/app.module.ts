@@ -5,11 +5,13 @@ import { AppService } from './app.service';
 import config from './config';
 import { CarsModule } from './modules/cars/cars.module';
 import { UserModule } from './modules/user/user.module';
+import { BooksModule } from './modules/books/books.module';
 console.log(config.database.mongoDB_Cluster);
 @Module({
   imports: [
     UserModule,
     CarsModule,
+    BooksModule,
     MongooseModule.forRoot(config.database.mongoDB_Cluster),
   ],
   controllers: [AppController],

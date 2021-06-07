@@ -1,6 +1,14 @@
 import { Length, IsEmail, IsOptional } from 'class-validator';
 import * as mongoose from 'mongoose';
 
+export class loginDTO {
+  @Length(6, 40)
+  @IsEmail()
+  email: string;
+
+  @Length(6, 15)
+  password: string;
+}
 export class userDTO {
   @Length(6, 30)
   name: string;

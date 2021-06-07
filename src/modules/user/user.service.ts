@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, userDTO, updateUserDTO } from './user.models';
+import { User, userDTO, updateUserDTO, loginDTO } from './user.models';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
+  
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   async create(createUserDto: userDTO) {
@@ -13,6 +14,7 @@ export class UserService {
       email: createUserDto.email,
       password: await bcrypt.hash(createUserDto.password, 10),
     });
+
     const existedUser = await this.findOneByEmail(createUserDto.email);
     if (existedUser) {
       return {
@@ -33,15 +35,27 @@ export class UserService {
     };
   }
 
+  login = async (loginDto: loginDTO) => {
+    const user  = await this.findOne(loginDto.email);
+    if(user) {
+      
+    }
+  }
+
   async findAll() {
     return await this.userModel.find().exec();
   }
 
   async findOne(id: string) {
     if (id.includes('@')) {
-      return await this.findOneByEmail(id);
+      const user = await this.findOneByEmail(id);
+      if (user) return user;
+      else return null;
+      return;
     } else {
-      return await this.userModel.findById(id);
+      const user = await this.userModel.findById(id);
+      if (user) return user;
+      else return null;
     }
   }
 

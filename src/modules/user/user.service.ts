@@ -42,41 +42,7 @@ export class UserService {
     return await this.userModel.find().exec();
   }
 
-  login = async (loginDto: loginDTO) => {
-    const user = await this.findOne(loginDto.email);
-    if (user) {
-      console.log(
-        'testt ',
-        user.password,
-        await bcrypt.hash(loginDto.password, user.salt),
-      );
-      if ((await bcrypt.hash(loginDto.password, user.salt)) === user.password) {
-        return {
-          operation: {
-            success: true,
-            message: 'login successfully',
-            data: { user: user },
-          },
-        };
-      } else {
-        return {
-          operation: {
-            success: false,
-            message: 'login failed',
-            data: { user: null },
-          },
-        };
-      }
-    } else {
-      return {
-        operation: {
-          success: false,
-          message: 'user not exist',
-          data: { user: null },
-        },
-      };
-    }
-  };
+  
 
   async findOne(id: string): Promise<User> {
     if (id.includes('@')) {

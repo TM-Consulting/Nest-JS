@@ -9,10 +9,12 @@ export class UserService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   async create(createUserDto: userDTO) {
+    const usersalt = await bcrypt.genSalt();
     const newUser = new this.userModel({
       name: createUserDto.name,
       email: createUserDto.email,
-      password: await bcrypt.hash(createUserDto.password, 10),
+      password: await bcrypt.hash(createUserDto.password, usersalt),
+      salt: usersalt,
     });
 
     const existedUser = await this.findOneByEmail(createUserDto.email);
@@ -46,7 +48,43 @@ export class UserService {
     return await this.userModel.find().exec();
   }
 
-  async findOne(id: string) {
+  login = async (loginDto: loginDTO) => {
+    const user = await this.findOne(loginDto.email);
+    if (user) {
+      console.log(
+        'testt ',
+        user.password,
+        await bcrypt.hash(loginDto.password, user.salt),
+      );
+      if ((await bcrypt.hash(loginDto.password, user.salt)) === user.password) {
+        return {
+          operation: {
+            success: true,
+            message: 'login successfully',
+            data: { user: user },
+          },
+        };
+      } else {
+        return {
+          operation: {
+            success: false,
+            message: 'login failed',
+            data: { user: null },
+          },
+        };
+      }
+    } else {
+      return {
+        operation: {
+          success: false,
+          message: 'user not exist',
+          data: { user: null },
+        },
+      };
+    }
+  };
+
+  async findOne(id: string): Promise<User> {
     if (id.includes('@')) {
       const user = await this.findOneByEmail(id);
       if (user) return user;

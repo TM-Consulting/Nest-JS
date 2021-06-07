@@ -26,6 +26,11 @@ export class UserController {
 
 
 
+  @Post('login')
+  login(@Body() loginDto: loginDTO) {
+    return this.userService.login(loginDto);
+  }
+
   @Get()
   findAll() {
     return this.userService.findAll();

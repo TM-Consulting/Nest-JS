@@ -11,12 +11,12 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
   login = async (loginDto: loginDTO) => {
-    const user = await this.userService.findOne(loginDto.email);
+    const user: any = await this.userService.findOne(loginDto.email);
     if (user) {
       if ((await bcrypt.hash(loginDto.password, user.salt)) === user.password) {
-        const { password, ...payload } = user;
+        const { salt, _id, __v, email_verified, ...rest } = user._doc;
         return {
-          access_token: this.jwtService.sign(payload),
+          access_token: this.jwtService.sign(rest),
         };
       } else {
         return {

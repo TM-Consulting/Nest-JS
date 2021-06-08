@@ -6,7 +6,9 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { loginDTO, updateUserDTO, userDTO } from './user.models';
 import { UserService } from './user.service';
 
@@ -23,7 +25,7 @@ export class UserController {
   findAll() {
     return this.userService.findAll();
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);

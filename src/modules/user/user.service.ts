@@ -42,8 +42,6 @@ export class UserService {
     return await this.userModel.find().exec();
   }
 
-  
-
   async findOne(id: string): Promise<User> {
     if (id.includes('@')) {
       return await this.findOneByEmail(id);

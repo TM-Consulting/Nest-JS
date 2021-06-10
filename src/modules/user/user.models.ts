@@ -39,12 +39,14 @@ export const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   salt: { type: String, required: true },
   email_verified: { type: Boolean, required: false, default: false },
+  token: { type: String, required: true },
 });
 
 export interface User extends mongoose.Document {
   id: string;
   name: string;
   email: string;
+  token: string;
   password: string;
   salt: string;
   email_verified: boolean;

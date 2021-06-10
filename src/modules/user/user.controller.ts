@@ -30,7 +30,6 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get()
   findOne(@Request() req) {
-    console.log('ahmed', req.user);
     return this.userService.findOne(req.user.email);
   }
   @UseGuards(JwtAuthGuard)

@@ -3,14 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, userDTO, updateUserDTO, loginDTO } from './user.models';
 import * as bcrypt from 'bcrypt';
-<<<<<<< HEAD
-
-
-
-=======
 import { MailService } from '../mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
->>>>>>> e4b21f65f1ab14851f9c7defb061ee59200c96ac
 @Injectable()
 export class UserService {
   constructor(

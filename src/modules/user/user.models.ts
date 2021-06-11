@@ -1,23 +1,29 @@
 import { Length, IsEmail, IsOptional } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import * as mongoose from 'mongoose';
 
 export class userDTO {
+  @ApiProperty({ example: 'abdou' })
   @Length(2, 30)
   name: string;
 
+  @ApiProperty({ example: 'abdou@example.com', description: ' must me in email ' })
   @Length(6, 40)
   @IsEmail()
   email: string;
 
+  @ApiProperty({ example: '123456', description: ' must me > 6 crts ' })
   @Length(6, 15)
   password: string;
 }
 
 export class updateUserDTO {
+  @ApiPropertyOptional({ example: 'abdou' })
   @Length(2, 30)
   @IsOptional()
   name?: string;
 
+  @ApiPropertyOptional({ example: 'abdou@example.com', description: ' must me in email ' })
   @Length(6, 40)
   @IsEmail()
   @IsOptional()
@@ -25,9 +31,11 @@ export class updateUserDTO {
 }
 
 export class loginDTO {
+  @ApiProperty({ example: '123456', description: ' must me > 6 crts ' })
   @Length(6, 30)
   password: string;
 
+  @ApiPropertyOptional({ example: 'abdou@example.com', description: ' must me in email ' })
   @Length(6, 40)
   @IsEmail()
   email: string;

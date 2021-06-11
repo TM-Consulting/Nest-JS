@@ -1,7 +1,9 @@
 import { Length, IsOptional } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import * as mongoose from 'mongoose';
 
 export class bookDTO {
+  @ApiProperty({ example: 'book' })
   @Length(6, 30)
   title: string;
 

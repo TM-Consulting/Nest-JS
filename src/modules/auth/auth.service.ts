@@ -37,4 +37,41 @@ export class AuthService {
       };
     }
   };
+
+  confirm = async (token: string) => {
+    const user: any = await this.userService.findOneByToken(token);
+
+    if (user) {
+      if (user._doc.token === token) {
+        if (user._doc.email_verified) {
+          return {
+            operation: {
+              success: true,
+              message: 'Email already verified',
+              data: { user: null },
+            },
+          };
+        }
+        user.email_verified = true;
+        user.save();
+
+        const { password, token, salt, ...rest } = user._doc;
+        return {
+          operation: {
+            success: true,
+            message: 'Email has been verified successfully',
+            data: { user: rest },
+          },
+        };
+      }
+    } else {
+      return {
+        operation: {
+          success: false,
+          message: 'user not exist',
+          data: { user: null },
+        },
+      };
+    }
+  };
 }

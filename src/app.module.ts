@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import config from './config';
 import { AuthModule } from './modules/auth/auth.module';
 import { CarsModule } from './modules/cars/cars.module';
+import { MailModule } from './modules/mail/mail.module';
 import { UserModule } from './modules/user/user.module';
 import { BooksModule } from './modules/books/books.module';
 console.log(config.database.mongoDB_Cluster);
@@ -12,6 +13,7 @@ console.log(config.database.mongoDB_Cluster);
   imports: [
     AuthModule,
     UserModule,
+    MailModule,
     CarsModule,
     BooksModule,
     MongooseModule.forRoot(config.database.mongoDB_Cluster),

@@ -1,87 +1,59 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Book, bookDTO, updateBookDTO } from './books.models';
 import { Model } from 'mongoose';
 import { UserService } from '../user/user.service';
-
-
+import { Book, newBooksDTO, updateBooksDTO } from './books.models';
 
 @Injectable()
 export class BooksService {
   constructor(
-    @InjectModel('Book') private readonly booksModel: Model<Book>,
+    @InjectModel('Books') private readonly booksModel: Model<Book>,
     private readonly userService: UserService,
-    ) {}
-    
-  
-  async create(createBookDto: bookDTO) {
-    const newBook = new this.booksModel({
-      
-      title: createBookDto.title,
-      description: createBookDto.description,
-      author_id: createBookDto.author_id,
-    });
+  ) {}
 
-      if (await this.userService.findOne(createBookDto.author_id)){
-        const result = await newBook.save();
-        return {
-          operation: {
-            success: true,
-            message: 'book added successfully',
-            data: { books: result },
-          },
-        };
-      }
-    const existedBook = await this.findOneByTitle(createBookDto.title);
-    if (existedBook) {
+  async create(createBooksDto: newBooksDTO) {
+    const newBooks = new this.booksModel({
+      title: createBooksDto.title,
+      description: createBooksDto.description,
+      author_id: createBooksDto.author_id,
+      image: createBooksDto.image,
+    });
+    if (await this.userService.findOne(createBooksDto.author_id)) {
+      const result = await newBooks.save();
       return {
         operation: {
-          success: false,
-          message: 'Book already exists',
-          data: { Book: null },
+          success: true,
+          message: 'Book added successfully',
+          data: { book: result },
         },
       };
     }
-    const result = await newBook.save();
-    return {
-      operation: {
-        success: true,
-        message: 'book added successfully',
-        data: { book: result },
-      },
-    };
   }
 
   async findAll() {
     return await this.booksModel.find().exec();
   }
+
   async findOne(id: string) {
-   
-      return await this.booksModel.findById(id);
-    
+    return await this.booksModel.findById(id);
   }
 
-  async findOneByTitle(title: string) {
-    return await this.booksModel.findOne({ title: title });
-  }
+  async update(id: string, updateBooksDTO: updateBooksDTO) {
+    const updateBooks = await this.findOne(id);
 
-  async update(id: string, updateBookDto: updateBookDTO) {
-    const updatedBook = await this.findOne(id);
-    
-    if (updateBookDto.title) {
-      updatedBook.title = updateBookDto.title;
+    if (updateBooksDTO.title) {
+      updateBooks.title = updateBooksDTO.title;
     }
-    if (updateBookDto.description) {
-      updatedBook.description = updateBookDto.description;
+    if (updateBooksDTO.description) {
+      updateBooks.description = updateBooksDTO.description;
     }
 
-    updatedBook.save();
+    updateBooks.save();
 
-    return updatedBook;
+    return updateBooks;
   }
 
   async remove(id: string) {
     return await this.booksModel.deleteOne({ _id: id });
   }
 }
-

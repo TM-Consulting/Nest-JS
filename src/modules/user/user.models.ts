@@ -28,7 +28,7 @@ export class updateUserDTO {
   @Length(2, 30)
   @IsOptional()
   name?: string;
-
+  @ApiPropertyOptional({ example: 'monaim@gmail.com' })
   @Length(6, 40)
   @IsEmail()
   @IsOptional()

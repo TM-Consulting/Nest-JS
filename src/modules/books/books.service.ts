@@ -6,19 +6,19 @@ import { Book, newBooksDTO, updateBooksDTO } from './books.models';
 
 @Injectable()
 export class BooksService {
-  constructor(@InjectModel('Books') private readonly booksModel: Model<Book>,
-  private readonly userService: UserService,
-
+  constructor(
+    @InjectModel('Books') private readonly booksModel: Model<Book>,
+    private readonly userService: UserService,
   ) {}
-
 
   async create(createBooksDto: newBooksDTO) {
     const newBooks = new this.booksModel({
       title: createBooksDto.title,
       description: createBooksDto.description,
       author_id: createBooksDto.author_id,
+      image: createBooksDto.image,
     });
-    if (await this.userService.findOne(createBooksDto.author_id)){ 
+    if (await this.userService.findOne(createBooksDto.author_id)) {
       const result = await newBooks.save();
       return {
         operation: {
@@ -26,11 +26,8 @@ export class BooksService {
           message: 'Book added successfully',
           data: { book: result },
         },
-      }; 
+      };
     }
-    
-    
-    
   }
 
   async findAll() {
@@ -38,19 +35,17 @@ export class BooksService {
   }
 
   async findOne(id: string) {
-    return await this.booksModel.findById(id)
+    return await this.booksModel.findById(id);
   }
-
-  
 
   async update(id: string, updateBooksDTO: updateBooksDTO) {
     const updateBooks = await this.findOne(id);
 
     if (updateBooksDTO.title) {
-        updateBooks.title = updateBooksDTO.title;
+      updateBooks.title = updateBooksDTO.title;
     }
     if (updateBooksDTO.description) {
-        updateBooks.description = updateBooksDTO.description;
+      updateBooks.description = updateBooksDTO.description;
     }
 
     updateBooks.save();

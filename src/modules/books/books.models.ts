@@ -15,8 +15,8 @@ export class newBooksDTO {
   @Length(6, 30)
   author_id: string;
 
-  @ApiPropertyOptional({ example: 'hello.jpg|png' })
-  image?: string;
+  @ApiProperty({ type: 'string', format: 'binary', example: 'hello.jpg|png' })
+  image: any;
 }
 
 export class updateBooksDTO {

@@ -9,9 +9,14 @@ import { MailModule } from './services/mail/mail.module';
 import { UserModule } from './modules/user/user.module';
 import { BooksModule } from './modules/books/books.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 console.log(config.database.mongoDB_Cluster);
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', './assets/booksImages'),
+    }),
     AuthModule,
     UserModule,
     MailModule,

@@ -18,8 +18,4 @@ async function bootstrap() {
   await app.listen(process.env.PORT);
 }
 
-<<<<<<< HEAD
 bootstrap();
-=======
-bootstrap();
->>>>>>> 4f0ed0c1c0f74cc14d80963ead1661ae05a2c275

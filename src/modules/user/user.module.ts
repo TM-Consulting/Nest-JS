@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './user.models';
-import { MailModule } from '../mail/mail.module';
+import { MailModule } from '../../services/mail/mail.module';
 import * as dotenv from 'dotenv';
 import { JwtModule } from '@nestjs/jwt';
 

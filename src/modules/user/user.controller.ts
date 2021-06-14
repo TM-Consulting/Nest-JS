@@ -10,7 +10,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { loginDTO, updateUserDTO, userDTO } from './user.models';
+import { updateUserDTO, userDTO } from './user.models';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -30,7 +30,6 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get()
   findOne(@Request() req) {
-    console.log('ahmed', req.user);
     return this.userService.findOne(req.user.email);
   }
   @UseGuards(JwtAuthGuard)

@@ -40,9 +40,5 @@ export interface Book extends mongoose.Document {
   title: string;
   description: string;
   author_id: string;
-<<<<<<< HEAD
-  
-=======
   image: string;
->>>>>>> 55c4e4262b9c36dfd790d1cec681d19abd94cf82
 }

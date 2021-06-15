@@ -17,6 +17,7 @@ import { editFileName, imageFileFilter } from 'src/utils/file-uploading.utils';
 
 import { newBooksDTO, updateBooksDTO } from './books.models';
 import { BooksService } from './books.service';
+import { ApiConsumes } from '@nestjs/swagger';
 
 @Controller('books')
 export class BooksController {
@@ -31,6 +32,7 @@ export class BooksController {
       fileFilter: imageFileFilter,
     }),
   )
+  @ApiConsumes('multipart/form-data')
   create(@UploadedFile() file, @Body() createBookDto: newBooksDTO) {
     createBookDto.image = file.filename;
     return this.booksService.create(createBookDto);

@@ -27,6 +27,14 @@ export class BooksService {
           data: { book: result },
         },
       };
+    } else {
+      return {
+        operation: {
+          success: false,
+          message: 'user doesn t exist',
+          data: { book: null },
+        },
+      };
     }
   }
 

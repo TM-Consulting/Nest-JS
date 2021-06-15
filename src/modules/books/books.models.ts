@@ -28,6 +28,7 @@ export const BookSchema = new mongoose.Schema({
 export interface Book extends mongoose.Document {
   id: string;
   title: string;
-  description: string
-  author_id: string
+  description: string;
+  author_id: string;
+  image: string;
 }

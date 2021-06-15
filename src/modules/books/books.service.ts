@@ -1,66 +1,75 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { userDTO } from '../user/user.models';
 import { UserService } from '../user/user.service';
-import { Book, BooksDTO, updateBooksDTO } from './books.models';
-
+import { Book, newBooksDTO, updateBooksDTO } from './books.models';
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Injectable()
 export class BooksService {
   constructor(
-    @InjectModel('Book') private readonly booksModel: Model<Book>,
+    @InjectModel('Books') private readonly booksModel: Model<Book>,
     private readonly userService: UserService,
   ) {}
 
-  async create(createBooksDto: BooksDTO) {
-    console.log(
-      'testtt',
-      await this.userService.findOne(createBooksDto.author_id),
-    );
+  async create(createBooksDto: newBooksDTO) {
+    const newBooks = new this.booksModel({
+      title: createBooksDto.title,
+      description: createBooksDto.description,
+      author_id: createBooksDto.author_id,
+      image: createBooksDto.image,
+    });
     if (await this.userService.findOne(createBooksDto.author_id)) {
-      const newBook = new this.booksModel({
-        title: createBooksDto.title,
-        description: createBooksDto.description,
-        author_id: createBooksDto.author_id,
-      });
-
-      const result = await newBook.save();
-      return result;
+      const result: any = await newBooks.save();
+      return {
+        operation: {
+          success: true,
+          message: 'Book added successfully',
+          data: { book: result },
+        },
+      };
     } else {
       return {
         operation: {
           success: false,
-          message: 'user does not exists',
-          data: { user: null },
+          message: 'books doesn t exist',
+          data: { book: null },
         },
       };
     }
   }
 
   async findAll() {
-    return await this.booksModel.find().exec();
+    const books: any = await this.booksModel.find().exec();
+    books.forEach(
+      (book) =>
+        (book._doc.image = `${process.env.BACK_URL}/books/image/${book._doc.image}`),
+    );
+    return books;
   }
 
   async findOne(id: string) {
-    return await this.booksModel.findById(id);
+    const book: any = await this.booksModel.findById(id);
+    book._doc.image = `${process.env.BACK_URL}/books/image/${book._doc.image}`;
+    return book;
   }
 
-  async update(id: string, updateBookDto: updateBooksDTO) {
-    const updatedBook = await this.findOne(id);
+  async update(id: string, updateBooksDTO: updateBooksDTO) {
+    const updateBooks = await this.findOne(id);
 
-    if (updateBookDto.title) {
-      updatedBook.title = updateBookDto.title;
+    if (updateBooksDTO.title) {
+      updateBooks.title = updateBooksDTO.title;
     }
-    if (updateBookDto.description) {
-      updatedBook.description = updateBookDto.description;
+    if (updateBooksDTO.description) {
+      updateBooks.description = updateBooksDTO.description;
     }
 
-    updatedBook.save();
+    updateBooks.save();
 
-    return updatedBook;
+    return updateBooks;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} book`;
+  async remove(id: string) {
+    return await this.booksModel.deleteOne({ _id: id });
   }
 }

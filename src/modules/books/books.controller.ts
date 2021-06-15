@@ -9,6 +9,8 @@ import {
   Put,
   UseInterceptors,
   UploadedFile,
+  Res,
+  UseGuards,
 } from '@nestjs/common';
 import { diskStorage } from 'multer';
 
@@ -18,7 +20,11 @@ import { editFileName, imageFileFilter } from 'src/utils/file-uploading.utils';
 import { newBooksDTO, updateBooksDTO } from './books.models';
 import { BooksService } from './books.service';
 import { ApiConsumes } from '@nestjs/swagger';
+import { of } from 'rxjs';
+import { join } from 'path';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
@@ -36,6 +42,19 @@ export class BooksController {
   create(@UploadedFile() file, @Body() createBookDto: newBooksDTO) {
     createBookDto.image = file.filename;
     return this.booksService.create(createBookDto);
+  }
+
+  @Get('image/:imagename')
+  findImage(@Param('imagename') imagename, @Res() res) {
+    try {
+      return of(
+        res.sendFile(
+          join(process.cwd(), 'src/assets/booksImages/' + imagename),
+        ),
+      );
+    } catch (e) {
+      return 'error';
+    }
   }
   @Get()
   findAll() {

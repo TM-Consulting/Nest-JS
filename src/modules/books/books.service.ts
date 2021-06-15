@@ -3,7 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserService } from '../user/user.service';
 import { Book, newBooksDTO, updateBooksDTO } from './books.models';
-
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Injectable()
 export class BooksService {
   constructor(
@@ -19,7 +20,7 @@ export class BooksService {
       image: createBooksDto.image,
     });
     if (await this.userService.findOne(createBooksDto.author_id)) {
-      const result = await newBooks.save();
+      const result: any = await newBooks.save();
       return {
         operation: {
           success: true,
@@ -31,7 +32,7 @@ export class BooksService {
       return {
         operation: {
           success: false,
-          message: 'user doesn t exist',
+          message: 'books doesn t exist',
           data: { book: null },
         },
       };
@@ -39,11 +40,18 @@ export class BooksService {
   }
 
   async findAll() {
-    return await this.booksModel.find().exec();
+    const books: any = await this.booksModel.find().exec();
+    books.forEach(
+      (book) =>
+        (book._doc.image = `${process.env.BACK_URL}/books/image/${book._doc.image}`),
+    );
+    return books;
   }
 
   async findOne(id: string) {
-    return await this.booksModel.findById(id);
+    const book: any = await this.booksModel.findById(id);
+    book._doc.image = `${process.env.BACK_URL}/books/image/${book._doc.image}`;
+    return book;
   }
 
   async update(id: string, updateBooksDTO: updateBooksDTO) {

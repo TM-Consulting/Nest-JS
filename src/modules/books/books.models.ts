@@ -18,7 +18,7 @@ export class updateBooksDTO {
   description?: string;
 }
 
-export const BookSchema = new mongoose.Schema({
+export const BooksSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   author_id: { type: String, required: true },

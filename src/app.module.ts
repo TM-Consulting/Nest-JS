@@ -8,7 +8,6 @@ import { BooksModule } from './modules/books/books.module';
 import { CarsModule } from './modules/cars/cars.module';
 import { MailModule } from './services/mail/mail.module';
 import { UserModule } from './modules/user/user.module';
-import { BooksModule } from './modules/books/books.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';

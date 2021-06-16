@@ -24,7 +24,7 @@ import { of } from 'rxjs';
 import { join } from 'path';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@UseGuards(JwtAuthGuard)
+
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
